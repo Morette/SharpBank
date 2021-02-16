@@ -1,10 +1,9 @@
 using System;
 using Account.Enums;
-using models;
 
-namespace Account
+namespace models
 {
-  public abstract class AbstractBankAccount : IAccount
+  public abstract class AbstractBankAccount
   {
     public int Id { get; }
     public Client Client { get; }
@@ -34,9 +33,5 @@ namespace Account
     {
       Console.WriteLine($"Account for client {Client.Name} was successfully created with the number {Id}");
     }
-
-    public abstract void Deposit(double value);
-    public abstract void Transfer(double ammount, BankAccount account);
-    public abstract void Withdrawal(double value);
   }
 }
