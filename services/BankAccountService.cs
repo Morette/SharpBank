@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Account.Enums;
 using models;
 using Repository;
 
 namespace services
 {
-  public class BankAccountService : IAccount
+  public class BankAccountService : IAccountService
   {
     private BankAccountRepository _bankAccountRepository;
 
@@ -14,9 +15,29 @@ namespace services
       this._bankAccountRepository = bankAccountRepository;
     }
 
-    public void Create(AccountType accountType, Client client, double balance = 0)
+    public List<BankAccount> ListAllAccount()
     {
-      _bankAccountRepository.Create(accountType, client, balance);
+      return _bankAccountRepository.ListAllAccount();
+    }
+
+    public void Create(string accountType, string clientName, string balance)
+    {
+      Client client = new Client(clientName);
+      int account = 0;
+      double value = 0;
+
+      int.TryParse(accountType, out account);
+      double.TryParse(balance, out value);
+
+      switch (account)
+      {
+        case (int)AccountType.NORMAL_PERSON:
+          _bankAccountRepository.Create(AccountType.NORMAL_PERSON, client, value);
+          break;
+        case (int)AccountType.LEGAL_PERSON:
+          _bankAccountRepository.Create(AccountType.LEGAL_PERSON, client, value);
+          break;
+      }
     }
 
     public void Deposit(BankAccount bank, double value)

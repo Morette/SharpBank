@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Linq;
+using Repository;
+using services;
 using Views;
 
 namespace bank
@@ -8,33 +9,34 @@ namespace bank
   {
     static void Main()
     {
-      int option = 0;
-
-      MainView mainView = new MainView();
-      UserOption clientOption = mainView.ShowView();
-
-      while (!clientOption.UserOptions.Any(item => item == clientOption.Option.ToUpper()))
-      {
-        Console.WriteLine("Please choose a valid option.");
-        clientOption = mainView.ShowView();
-      }
-
-      if (int.TryParse(clientOption.Option, out option))
-        Start(option);
-
-      Environment.Exit(0);
+      Start();
     }
 
-    private static void Start(int clientOption)
+    static void Start()
     {
+      BankAccountRepository bankAccountRepository = new BankAccountRepository();
+      BankAccountService bankAccountService = new BankAccountService(bankAccountRepository);
+
+      string clientOption = new MainView().ShowView(bankAccountService);
+
       switch (clientOption)
       {
-        case 1:
-          new MainView().ShowView();
+        case "1":
+          Console.WriteLine(new CreateAccountView().ShowView(bankAccountService));
+          break;
+        case "2":
           break;
         default:
-          return;
+          Console.WriteLine("Please choose a valid option");
+          break;
       }
+
+      if (clientOption.ToUpper() == "X")
+      {
+        Environment.Exit(0);
+      }
+
+      Start();
     }
   }
 }

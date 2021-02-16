@@ -1,13 +1,17 @@
 using System.Collections.Generic;
 using Account.Enums;
 using models;
-using services;
 
 namespace Repository
 {
-  public class BankAccountRepository : IAccount
+  public class BankAccountRepository : IAccountRepository
   {
     private List<BankAccount> accountList = new List<BankAccount>();
+
+    public List<BankAccount> ListAllAccount()
+    {
+      return accountList;
+    }
 
     public void Create(AccountType accountType, Client client, double balance = 0)
     {

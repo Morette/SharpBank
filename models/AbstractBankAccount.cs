@@ -15,9 +15,7 @@ namespace models
       this.Client = client;
       this.AccountType = accountType;
       this.Balance = 0;
-
-      this.Id++;
-      PrintAccountCreated();
+      this.Id = new Random().Next(1, 1000);
     }
 
     public AbstractBankAccount(AccountType accountType, Client client, double balance)
@@ -25,13 +23,7 @@ namespace models
       this.AccountType = accountType;
       this.Client = client;
       this.Balance = balance;
-
-      this.Id++;
-      PrintAccountCreated();
-    }
-    private void PrintAccountCreated()
-    {
-      Console.WriteLine($"Account for client {Client.Name} was successfully created with the number {Id}");
+      this.Id = new Random().Next(1, 1000);
     }
   }
 }

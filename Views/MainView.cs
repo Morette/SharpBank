@@ -1,10 +1,11 @@
 using System;
+using services;
 
 namespace Views
 {
   public class MainView : AbstractView
   {
-    public override UserOption ShowView()
+    public override string ShowView(BankAccountService bankAccountService)
     {
       string[] options = new string[] { "1", "2", "3", "4", "5", "X" };
 
@@ -17,9 +18,7 @@ namespace Views
       Console.WriteLine("5. Deposit");
       Console.WriteLine("X. Exit\n");
 
-      string option = Console.ReadLine();
-
-      return new UserOption(option, options);
+      return Console.ReadLine();
     }
   }
 }
