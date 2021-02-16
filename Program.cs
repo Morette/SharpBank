@@ -1,23 +1,26 @@
 ﻿using System;
-using models;
-using models.enums;
+using Views;
 
 namespace bank
 {
-   class Program
-   {
-      static void Main(string[] args)
+  class Program
+  {
+    static void Main(string[] args)
+    {
+      int option = 0;
+
+      MainView mainView = new MainView();
+      string clientOption = mainView.ShowView();
+
+      while (!int.TryParse(clientOption, out option) || !(clientOption.ToUpper() == "X"))
       {
-         Client thiago = new Client("thiago morette");
-         Client kamila = new Client("kamila araujo");
-         Account thiagoAccount = new Account(AccountType.NORMAL_PERSON, thiago, 500);
-         Account kamilaAccount = new Account(AccountType.NORMAL_PERSON, kamila, 500);
-
-         thiagoAccount.Deposit(200);
-         thiagoAccount.Withdrawal(850);
-
-         thiagoAccount.Transfer(200, kamilaAccount);
-         kamilaAccount.PrintBalance();
+        Console.WriteLine("Please choose a valid option");
+        mainView.ShowView();
       }
-   }
+
+      if (clientOption.ToUpper() == "X")
+        Environment.Exit(0);
+
+    }
+  }
 }
