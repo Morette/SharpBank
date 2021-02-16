@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Account;
 using Account.Enums;
 
@@ -6,9 +7,17 @@ namespace models
 {
   public class BankAccount : AbstractBankAccount
   {
-    public BankAccount(AccountType accountType, Client client) : base(accountType, client) { }
+    private List<BankAccount> accountList = new List<BankAccount>();
 
-    public BankAccount(AccountType accountType, Client client, double balance) : base(accountType, client, balance) { }
+    public BankAccount(AccountType accountType, Client client) : base(accountType, client)
+    {
+      accountList.Add(this);
+    }
+
+    public BankAccount(AccountType accountType, Client client, double balance) : base(accountType, client, balance)
+    {
+      accountList.Add(this);
+    }
 
     public override void Deposit(double value)
     {
@@ -46,7 +55,7 @@ namespace models
 
     public void PrintBalance()
     {
-      Console.WriteLine($"{Client.Name} have US${Balance} in account.");
+      Console.WriteLine($"{Client.Name} have US${Balance} in account {Id}");
     }
   }
 }
