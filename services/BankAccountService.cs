@@ -6,7 +6,7 @@ using Repository;
 
 namespace services
 {
-  public class BankAccountService : IAccountService
+  public class BankAccountService : IAccountService<BankAccount>
   {
     private BankAccountRepository _bankAccountRepository;
 
@@ -40,38 +40,92 @@ namespace services
       }
     }
 
-    public void Deposit(BankAccount bank, double value)
+    public bool Deposit(string bankId, string value)
     {
-      _bankAccountRepository.Deposit(bank, value);
-    }
+      int account = 0;
+      double ammount = 0;
 
-    public void Withdrawal(BankAccount bank, double value)
-    {
-      if (CheckBalance(bank, value))
+      if (!int.TryParse(bankId, out account))
       {
-        double balance = _bankAccountRepository.CheckBalance(bank);
-        Console.WriteLine("This ammount is higher than you have in your account.\n" +
-          $"Your current balance is US${balance}");
-        return;
+        Console.WriteLine("Please, input a valid account number");
+        return false;
       }
 
-      _bankAccountRepository.Withdrawal(bank, value);
-      Console.WriteLine($"Deposit completed.");
+      if (!double.TryParse(value, out ammount))
+      {
+        Console.WriteLine("Please, input a valid ammount");
+        return false;
+      }
+
+      _bankAccountRepository.Deposit(account, ammount);
+      return true;
     }
 
-    public void Transfer(BankAccount destinyAccount, double value)
+    public bool Withdrawal(string bankId, string value)
     {
-      if (!CheckBalance(destinyAccount, value))
-        Console.WriteLine("You don't have enough money to transfer!");
+      int account = 0;
+      double ammount = 0;
 
-      _bankAccountRepository.Deposit(destinyAccount, value);
-      Console.WriteLine("Deposit done.");
+      if (!int.TryParse(bankId, out account))
+      {
+        Console.WriteLine("Please, input a valid account number");
+        return false;
+      }
+
+      if (!double.TryParse(value, out ammount))
+      {
+        Console.WriteLine("Please, input a valid ammount");
+        return false;
+      }
+
+      if (!CheckBalance(account, ammount))
+      {
+        double? balance = _bankAccountRepository.CheckBalance(account);
+        Console.WriteLine("Please verify if the ammount and account are correct.");
+        return false;
+      }
+
+      return _bankAccountRepository.Withdrawal(account, ammount);
     }
 
-    private bool CheckBalance(BankAccount bank, double value)
+    public bool Transfer(string originalAccount, string destinyAccount, string value)
     {
-      double balance = _bankAccountRepository.CheckBalance(bank);
-      return balance < value;
+      int initialAccount = 0;
+      int finalAccount = 0;
+      double ammount = 0;
+
+      if (!int.TryParse(destinyAccount, out finalAccount) || !int.TryParse(originalAccount, out initialAccount))
+      {
+        Console.WriteLine("Please, input a valid account number");
+        return false;
+      }
+
+      if (!double.TryParse(value, out ammount))
+      {
+        Console.WriteLine("Please, input a valid ammount");
+        return false;
+      }
+
+      if (!CheckBalance(initialAccount, ammount))
+      {
+        Console.WriteLine("You don't have enough money to transfer or the account does not exist.");
+        return false;
+      }
+
+      if (!_bankAccountRepository.Withdrawal(initialAccount, ammount))
+      {
+        Console.WriteLine("Please verify if the destination account is correct.");
+        return false;
+      }
+
+      _bankAccountRepository.Deposit(finalAccount, ammount);
+      return true;
+    }
+
+    private bool CheckBalance(int account, double value)
+    {
+      double? balance = _bankAccountRepository.CheckBalance(account);
+      return balance is not null ? balance > value : false;
     }
   }
 }

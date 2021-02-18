@@ -1,9 +1,7 @@
-using services;
-
 namespace Views
 {
-  public abstract class AbstractView : IView
+  public abstract class AbstractView<T> : IView<T>
   {
-    public abstract string ShowView(BankAccountService bankAccountService);
+    public abstract string ShowView(T t);
   }
 }

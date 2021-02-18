@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using Account.Enums;
-using models;
 
 namespace Repository
 {
-  public interface IAccountRepository
+  public interface IAccountRepository<T, E>
   {
-    public List<BankAccount> ListAllAccount();
-    public void Create(AccountType accountType, Client client, double balance);
-    public void Deposit(BankAccount bank, double ammount);
-    public void Withdrawal(BankAccount bank, double value);
+    public List<T> ListAllAccount();
+    public void Create(AccountType accountType, E e, double balance);
+    public bool Deposit(int bank, double ammount);
+    public bool Withdrawal(int bank, double ammount);
   }
 }

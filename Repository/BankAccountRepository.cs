@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using Account.Enums;
 using models;
 
 namespace Repository
 {
-  public class BankAccountRepository : IAccountRepository
+  public class BankAccountRepository : IAccountRepository<BankAccount, Client>
   {
     private List<BankAccount> accountList = new List<BankAccount>();
 
@@ -19,22 +20,37 @@ namespace Repository
       accountList.Add(bank);
     }
 
-    public void Deposit(BankAccount bank, double ammount)
+    public bool Deposit(int bankId, double ammount)
     {
-      BankAccount bankAccount = accountList.Find(b => b == bank);
-      bankAccount.Balance += ammount;
+      BankAccount bank = VerifyIfAccountExist(bankId);
+
+      if (bank is null)
+        return false;
+
+      bank.Balance += ammount;
+      return true;
     }
 
-    public void Withdrawal(BankAccount bank, double value)
+    public bool Withdrawal(int bankId, double ammount)
     {
-      BankAccount bankAccount = accountList.Find(b => b == bank);
-      bankAccount.Balance -= value;
+      BankAccount bank = VerifyIfAccountExist(bankId);
+
+      if (bank is null)
+        return false;
+
+      bank.Balance -= ammount;
+      return true;
     }
 
-    public double CheckBalance(BankAccount bank)
+    public double? CheckBalance(int bankId)
     {
-      BankAccount bankAccount = accountList.Find(b => b == bank);
-      return bankAccount.Balance;
+      BankAccount bank = VerifyIfAccountExist(bankId);
+      return bank is null ? null : bank.Balance;
+    }
+
+    public BankAccount VerifyIfAccountExist(int bankId)
+    {
+      return ListAllAccount().FirstOrDefault(account => account.Id == bankId);
     }
   }
 }

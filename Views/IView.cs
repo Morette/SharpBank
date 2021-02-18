@@ -1,9 +1,7 @@
-using services;
-
 namespace Views
 {
-  public interface IView
+  public interface IView<T>
   {
-    string ShowView(BankAccountService bankAccountService);
+    string ShowView(T t);
   }
 }

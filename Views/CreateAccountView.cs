@@ -4,7 +4,7 @@ using services;
 
 namespace Views
 {
-  public class CreateAccountView : AbstractView
+  public class CreateAccountView : AbstractView<BankAccountService>
   {
     public override string ShowView(BankAccountService bankAccountService)
     {

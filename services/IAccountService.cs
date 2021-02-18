@@ -1,14 +1,13 @@
 using System.Collections.Generic;
-using Account.Enums;
-using models;
 
 namespace services
 {
-  public interface IAccountService
+  public interface IAccountService<T>
   {
-    public List<BankAccount> ListAllAccount();
+    public List<T> ListAllAccount();
     public void Create(string accountType, string clientName, string balance);
-    public void Deposit(BankAccount bank, double ammount);
-    public void Withdrawal(BankAccount bank, double value);
+    public bool Deposit(string bankId, string ammount);
+    public bool Withdrawal(string bankId, string ammount);
+    public bool Transfer(string account, string destinationAccount, string ammount);
   }
 }
